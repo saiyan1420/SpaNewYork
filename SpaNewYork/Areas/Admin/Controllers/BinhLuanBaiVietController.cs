@@ -10,6 +10,8 @@ using SpaNewYork.Models;
 
 namespace SpaNewYork.Areas.Admin.Controllers
 {
+    
+    // tesettttttttttttttttt
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
     public class BinhLuanBaiVietController : Controller
