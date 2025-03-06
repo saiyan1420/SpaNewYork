@@ -10,7 +10,7 @@ using SpaNewYork.Models;
 
 namespace SpaNewYork.Areas.Admin.Controllers
 {
-    //test chude
+    //test chudess
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
     public class ChuDeController : Controller
