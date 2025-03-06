@@ -10,7 +10,7 @@ namespace SpaNewYork.Areas.Admin.Controllers
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
     public class DanhMucHangHoaDichVuController : Controller
-    { 
+    {
         private readonly SpaNewYorkDB _context;
 
         public DanhMucHangHoaDichVuController(SpaNewYorkDB context)
@@ -37,7 +37,7 @@ namespace SpaNewYork.Areas.Admin.Controllers
 
         private PhanTrangDanhMuc LayDanhSachDanhMuc(int trangHienTai)
         {
-            int maxRows = 2000;
+            int maxRows = 3000;
 
             var danhMucQuery = _context.DanhMucHangHoaDichVu.OrderBy(r => r.STT);
             var tongSoTrang = (int)Math.Ceiling((double)danhMucQuery.Count() / maxRows);
@@ -70,7 +70,7 @@ namespace SpaNewYork.Areas.Admin.Controllers
 
         private PhanTrangDanhMuc LayDanhSachDanhMucTheoPhanLoai(byte? nhomHHDV, int trangHienTai)
         {
-            int maxRows = 20;
+            int maxRows = 3000;
 
             var danhMucPhanLoaiQuery = _context.DanhMucHangHoaDichVu
                 .Where(r => !nhomHHDV.HasValue || r.NhomHHDV == nhomHHDV)
@@ -86,6 +86,78 @@ namespace SpaNewYork.Areas.Admin.Controllers
             };
 
             return phanTrang;
+        }
+
+        // GET: Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(DanhMucHangHoaDichVu danhMuc)
+        {
+            if (ModelState.IsValid)
+            {
+                short maxSTT = _context.DanhMucHangHoaDichVu.Max(d => (short?)d.STT) ?? 0;
+                danhMuc.STT = (short)(maxSTT + 1);
+
+                _context.Add(danhMuc);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(danhMuc);
+        }
+
+        // GET: Edit
+        public async Task<IActionResult> Edit(short id)
+        {
+            var danhMuc = await _context.DanhMucHangHoaDichVu.FindAsync(id);
+            if (danhMuc == null)
+                return NotFound();
+            return View(danhMuc);
+        }
+
+        // POST: Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(short id, DanhMucHangHoaDichVu danhMuc)
+        {
+            if (id != danhMuc.STT)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                _context.Update(danhMuc);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(danhMuc);
+        }
+
+        // GET: Delete
+        public async Task<IActionResult> Delete(short id)
+        {
+            var danhMuc = await _context.DanhMucHangHoaDichVu.FindAsync(id);
+            if (danhMuc == null)
+                return NotFound();
+            return View(danhMuc);
+        }
+
+        // POST: Delete
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(short id)
+        {
+            var danhMuc = await _context.DanhMucHangHoaDichVu.FindAsync(id);
+            if (danhMuc != null)
+            {
+                _context.DanhMucHangHoaDichVu.Remove(danhMuc);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }
