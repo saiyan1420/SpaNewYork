@@ -1,0 +1,85 @@
+﻿html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    background-color: #343a40;
+}
+
+.navbar-brand, .nav-link, .dropdown-item {
+    color: #ffffff !important;
+}
+
+    .navbar-brand:hover, .nav-link:hover, .dropdown-item:hover {
+        color: #ffc107 !important;
+    }
+
+.footer {
+    background-color: #343a40;
+    color: #ffffff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.card-header {
+    background-color: #ffc107;
+    color: #343a40;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.navbar-nav .nav-item {
+    margin-right: 15px;
+}
+
+.navbar-nav .dropdown-menu {
+    background-color: #343a40;
+}
+
+.navbar-nav .dropdown-item {
+    padding: 10px 20px;
+}
+
+    .navbar-nav .dropdown-item:hover {
+        background-color: #ffc107;
+        color: #343a40 !important;
+    }
+
+.main-content {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+    margin-top: 20px;
+    padding: 10px 0;
+    background-color: #343a40;
+    color: #ffffff;
+    text-align: center;
+}

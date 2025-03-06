@@ -1,0 +1,96 @@
+﻿@model IEnumerable<SpaNewYork.Models.DanhMucHangHoaDichVu>
+
+@{
+    ViewData["Title"] = "Danh mục hàng hóa & dịch vụ";
+}
+
+<div class="card">
+    <h5 class="card-header">@ViewData["Title"]</h5>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <p><a asp-action="Create" class="btn btn-success"><i class="fa-light fa-plus"></i> Thêm mới</a></p>
+            </div>
+            <div class="col-md-6 text-end">
+                <div id="export-buttons"></div>
+            </div>
+        </div>
+        <table id="datatable" class="table table-sm table-hover table-striped table-bordered mb-0">
+            <thead>
+                <tr>
+                    <th width="5%">#</th>
+                    <th>@Html.DisplayNameFor(model => model.First().MaHHDV)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().TenHHDV)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().GiaBan)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().DonViTinh)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().MoTa)</th>
+                    <th width="5%">Sửa</th>
+                    <th width="5%">Xóa</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td></td> <!-- Số thứ tự tự động -->
+                        <td>@item.MaHHDV</td>
+                        <td>@item.TenHHDV</td>
+                        <td>@item.GiaBan.ToString("N0") đ</td>
+                        <td>@item.DonViTinh</td>
+                        <td>@item.MoTa</td>
+                        <td class="text-center">
+                            <a href="@Url.Action("Edit", "DanhMucHangHoaDichVu", new { id = item.STT })">
+                                <i class="fa-light fa-pen-to-square"></i>
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a href="@Url.Action("Delete", "DanhMucHangHoaDichVu", new { id = item.STT })" class="text-danger">
+                                <i class="fa-light fa-trash-can"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#datatable').DataTable({
+                language: {
+                    processing: 'Đang xử lý...',
+                    lengthMenu: 'Hiển thị _MENU_ dòng',
+                    zeroRecords: 'Không tìm thấy dòng nào phù hợp',
+                    info: 'Đang xem _START_ đến _END_ trong tổng số _TOTAL_ dòng',
+                    infoEmpty: 'Đang xem 0 đến 0 trong tổng số 0 dòng',
+                    emptyTable: 'Không có dữ liệu',
+                    infoFiltered: '(được lọc từ _MAX_ dòng)',
+                    search: 'Tìm kiếm:',
+                    paginate: {
+                        first: '<i class="fa-duotone fa-arrow-left-to-line"></i>',
+                        last: '<i class="fa-duotone fa-arrow-right-to-line"></i>',
+                        next: '<i class="fa-duotone fa-arrow-right"></i>',
+                        previous: '<i class="fa-duotone fa-arrow-left"></i>'
+                    }
+                },
+                order: [[1, 'asc']], // Sắp xếp theo Mã HHDV
+                columnDefs: [
+                    { orderable: false, targets: [0, 6, 7] } // Không sắp xếp cột STT, Sửa, Xóa
+                ]
+            });
+
+            // Đánh số thứ tự tự động
+            table.on('order.dt search.dt', function () {
+                table.column(0, { search: 'applied', order: 'applied' })
+                    .nodes()
+                    .each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+            }).draw();
+        });
+    </script>
+}
