@@ -10,7 +10,7 @@ using SpaNewYork.Models;
 
 namespace SpaNewYork.Areas.Admin.Controllers
 {
-    //test cong no
+    //test cong no khach hang
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
     public class CongNoKhachHangController : Controller
