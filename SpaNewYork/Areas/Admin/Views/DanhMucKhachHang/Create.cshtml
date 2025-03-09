@@ -1,63 +1,82 @@
 ﻿@model SpaNewYork.Models.DanhMucKhachHang
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Thêm khách hàng";
 }
 
-<h1>Create</h1>
+<h1 class="text-center text-primary">Thêm khách hàng</h1>
 
-<h4>DanhMucKhachHang</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="LoaiKhachHang" class="control-label"></label>
-                <input asp-for="LoaiKhachHang" class="form-control" />
-                <span asp-validation-for="LoaiKhachHang" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaKhachHang" class="control-label"></label>
-                <input asp-for="MaKhachHang" class="form-control" />
-                <span asp-validation-for="MaKhachHang" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TenKhachHang" class="control-label"></label>
-                <input asp-for="TenKhachHang" class="form-control" />
-                <span asp-validation-for="TenKhachHang" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SoDienThoai" class="control-label"></label>
-                <input asp-for="SoDienThoai" class="form-control" />
-                <span asp-validation-for="SoDienThoai" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiaChi" class="control-label"></label>
-                <input asp-for="DiaChi" class="form-control" />
-                <span asp-validation-for="DiaChi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GhiChu" class="control-label"></label>
-                <input asp-for="GhiChu" class="form-control" />
-                <span asp-validation-for="GhiChu" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NgaySinh" class="control-label"></label>
-                <input asp-for="NgaySinh" class="form-control" />
-                <span asp-validation-for="NgaySinh" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<div class="card shadow p-4 mb-4 bg-white rounded">
+    <h4 class="text-secondary">Nhập thông tin khách hàng</h4>
+    <hr />
+    <form asp-action="Create" id="customerForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+        <div class="form-group">
+            <label asp-for="LoaiKhachHang" class="control-label">Loại khách hàng</label>
+            <select asp-for="LoaiKhachHang" class="form-control" id="loaiKhachHang">
+                <option value="KL">Khách lẻ</option>
+                <option value="VIP">VIP</option>
+            </select>
+            <span asp-validation-for="LoaiKhachHang" class="text-danger"></span>
+        </div>
+
+        <input asp-for="MaKhachHang" id="inputMaKhachHang" type="hidden" />
+
+        <div class="form-group">
+            <label asp-for="TenKhachHang" class="control-label">Tên khách hàng</label>
+            <input asp-for="TenKhachHang" class="form-control" />
+            <span asp-validation-for="TenKhachHang" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="SoDienThoai" class="control-label">Số điện thoại</label>
+            <input asp-for="SoDienThoai" class="form-control" />
+            <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DiaChi" class="control-label">Địa chỉ</label>
+            <input asp-for="DiaChi" class="form-control" />
+            <span asp-validation-for="DiaChi" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="GhiChu" class="control-label">Ghi chú</label>
+            <input asp-for="GhiChu" class="form-control" />
+            <span asp-validation-for="GhiChu" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NgaySinh" class="control-label">Ngày sinh</label>
+            <input asp-for="NgaySinh" class="form-control" />
+            <span asp-validation-for="NgaySinh" class="text-danger"></span>
+        </div>
+
+        <div class="form-group text-center mt-3">
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Lưu</button>
+            <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function updateCustomerCode() {
+                let loaiKH = document.getElementById("loaiKhachHang").value;
+                fetch("/DanhMucKhachHang/GetNextCustomerCode?loaiKH=" + loaiKH)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById("inputMaKhachHang").value = data;
+                    });
+            }
+
+            document.getElementById("loaiKhachHang").addEventListener("change", updateCustomerCode);
+            updateCustomerCode(); // Gọi lần đầu khi trang load
+        });
+    </script>
 }
