@@ -1,0 +1,108 @@
+﻿@model SpaNewYork.Models.DanhMucKhachHang
+@{
+    ViewData["Title"] = "Thêm khách hàng";
+}
+<h2>Thêm khách hàng</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="LoaiKhachHang">Loại khách hàng</label>
+                <select asp-for="LoaiKhachHang" id="loaiKhachHang" class="form-control">
+                    <option value="KL">Khách lẻ</option>
+                    <option value="VIP">Khách VIP</option>
+                </select>
+                <span asp-validation-for="LoaiKhachHang" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MaKhachHang">Mã khách hàng</label>
+                <input asp-for="MaKhachHang" id="maKhachHang" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TenKhachHang">Tên khách hàng</label>
+                <input asp-for="TenKhachHang" class="form-control" required />
+                <span asp-validation-for="TenKhachHang" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SoDienThoai">Số điện thoại</label>
+                <input asp-for="SoDienThoai" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DiaChi">Địa chỉ</label>
+                <input asp-for="DiaChi" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NgaySinh">Ngày sinh</label>
+                <input asp-for="NgaySinh" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="GhiChu">Ghi chú</label>
+                <textarea asp-for="GhiChu" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Lưu</button>
+                <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            // Clear default space in optional fields when focused
+            $('input[name="SoDienThoai"], input[name="DiaChi"], input[name="NgaySinh"], textarea[name="GhiChu"]').focus(function () {
+                if ($(this).val() === ' ') {
+                    $(this).val('');
+                }
+            });
+
+            // Set back to space if left empty on blur
+            $('input[name="SoDienThoai"], input[name="DiaChi"], input[name="NgaySinh"], textarea[name="GhiChu"]').blur(function () {
+                if ($(this).val() === '') {
+                    $(this).val(' ');
+                }
+            });
+
+            // Function to fetch the next customer code
+            function getNextCustomerCode() {
+                var loaiKH = $('#loaiKhachHang').val();
+
+                $.ajax({
+                    url: '/Admin/DanhMucKhachHang/GetNextCustomerCode',
+                    type: 'GET',
+                    data: { loaiKH: loaiKH },
+                    success: function (data) {
+                        $('#maKhachHang').val(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching customer code:', error);
+                        alert('Không thể lấy mã khách hàng. Vui lòng thử lại.');
+                    }
+                });
+            }
+
+            // Initial load
+            getNextCustomerCode();
+
+            // When customer type changes
+            $('#loaiKhachHang').change(function () {
+                getNextCustomerCode();
+            });
+        });
+    </script>
+}

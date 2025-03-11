@@ -1,21 +1,85 @@
 ﻿@model SpaNewYork.Models.DanhMucHangHoaDichVu
 
 @{
-    ViewData["Title"] = "Xóa danh mục hàng hóa & dịch vụ";
+    ViewData["Title"] = "Xóa hàng hóa dịch vụ";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-<div class="card">
-    <h5 class="card-header">@ViewData["Title"]</h5>
-    <div class="card-body">
-        <form asp-action="Delete">
-            <input type="hidden" asp-for="STT" />
 
-            <div class="alert alert-danger" role="alert">
-                <i class="fa-light fa-triangle-exclamation"></i> Bạn có muốn xóa danh mục <strong>@Model.TenHHDV</strong> không?
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Xóa hàng hóa dịch vụ</h6>
+        </div>
+        <div class="card-body">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="alert alert-warning">
+                <h5><i class="fa fa-exclamation-triangle"></i> Xác nhận xóa</h5>
+                <p>Bạn có chắc chắn muốn xóa hàng hóa dịch vụ này không?</p>
+                <p><strong>Lưu ý:</strong> Thao tác này không thể hoàn tác sau khi thực hiện.</p>
             </div>
 
-            <div class="mb-0">
-                <button type="submit" class="btn btn-danger"><i class="fa-light fa-circle-check"></i> Xác nhận xóa</button> hoặc <a asp-action="Index">Quay về danh sách</a>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th style="width: 30%">STT</th>
+                        <td>@Model.STT</td>
+                    </tr>
+                    <tr>
+                        <th>Tên hàng hóa dịch vụ</th>
+                        <td>@Model.TenHHDV</td>
+                    </tr>
+                    <tr>
+                        <th>Nhóm HHDV</th>
+                        <td>@Model.NhomHHDV</td>
+                    </tr>
+                    <tr>
+                        <th>Đơn vị tính</th>
+                        <td>@Model.DonViTinh</td>
+                    </tr>
+                    <tr>
+                        <th>Đơn giá</th>
+                        <td>@Model.GiaBan.ToString("N0") VNĐ</td>
+                    </tr>
+                    @if (Model.MoTa != null)
+                    {
+                        <tr>
+                            <th>Mô tả</th>
+                            <td>@Model.MoTa</td>
+                        </tr>
+                    }
+                </table>
             </div>
-        </form>
+
+            <form asp-action="Delete" method="post" onsubmit="return confirmDelete()">
+                <input type="hidden" asp-for="STT" />
+                <div class="d-flex mt-3">
+                    <a asp-action="Index" class="btn btn-secondary mr-2">
+                        <i class="fa fa-arrow-left"></i> Quay lại danh sách
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash"></i> Xác nhận xóa
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            return confirm("Bạn có chắc chắn muốn xóa hàng hóa dịch vụ này không?\nThao tác này không thể hoàn tác sau khi thực hiện.");
+        }
+    </script>
+}
