@@ -9,6 +9,7 @@ using SpaNewYork.Models;
 
 namespace SpaNewYork.Controllers
 {
+    // ví dụ như cái t đang viết này sẽ là code sau khi đã làm xong (kiểu m xong code chạy được hết r ấy. Thì m push lên git có gi cho t tải chuột phải vô cái code đã sửa 
     public class GioHangController : Controller
     {
         private readonly SpaNewYorkDB _context;
