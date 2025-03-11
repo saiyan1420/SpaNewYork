@@ -1,32 +1,33 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SpaNewYork.Models;
 
-namespace SpaNewYork.Controllers
+namespace SpaNewYork.Areas.Admin.Controllers
 {
-    //test
-    /// </summary>
-    public class GioHangController : Controller
+    [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+    public class HoaDonController : Controller
     {
         private readonly SpaNewYorkDB _context;
 
-        public GioHangController(SpaNewYorkDB context)
+        public HoaDonController(SpaNewYorkDB context)
         {
             _context = context;
         }
 
-        // GET: GioHang
+        // GET: Admin/HoaDon
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GioHang.ToListAsync());
+            return View(await _context.HoaDon.ToListAsync());
         }
 
-        // GET: GioHang/Details/5
+        // GET: Admin/HoaDon/Details/5
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -34,39 +35,39 @@ namespace SpaNewYork.Controllers
                 return NotFound();
             }
 
-            var gioHang = await _context.GioHang
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (gioHang == null)
+            var hoaDon = await _context.HoaDon
+                .FirstOrDefaultAsync(m => m.SoHoaDon == id);
+            if (hoaDon == null)
             {
                 return NotFound();
             }
 
-            return View(gioHang);
+            return View(hoaDon);
         }
 
-        // GET: GioHang/Create
+        // GET: Admin/HoaDon/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: GioHang/Create
+        // POST: Admin/HoaDon/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,TenDangNhap,STT,SoLuongTrongGio,ThoiGian")] GioHang gioHang)
+        public async Task<IActionResult> Create([Bind("SoHoaDon,NgayHoaDon,MaKhachHang,TenKhachHang,MaNV,GiaBan,PhanTramChietKhau,SoTienChietKhauGiamGia,TongThanhToan")] HoaDon hoaDon)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(gioHang);
+                _context.Add(hoaDon);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(gioHang);
+            return View(hoaDon);
         }
 
-        // GET: GioHang/Edit/5
+        // GET: Admin/HoaDon/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -74,22 +75,22 @@ namespace SpaNewYork.Controllers
                 return NotFound();
             }
 
-            var gioHang = await _context.GioHang.FindAsync(id);
-            if (gioHang == null)
+            var hoaDon = await _context.HoaDon.FindAsync(id);
+            if (hoaDon == null)
             {
                 return NotFound();
             }
-            return View(gioHang);
+            return View(hoaDon);
         }
 
-        // POST: GioHang/Edit/5
+        // POST: Admin/HoaDon/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("ID,TenDangNhap,STT,SoLuongTrongGio,ThoiGian")] GioHang gioHang)
+        public async Task<IActionResult> Edit(string id, [Bind("SoHoaDon,NgayHoaDon,MaKhachHang,TenKhachHang,MaNV,GiaBan,PhanTramChietKhau,SoTienChietKhauGiamGia,TongThanhToan")] HoaDon hoaDon)
         {
-            if (id != gioHang.ID)
+            if (id != hoaDon.SoHoaDon)
             {
                 return NotFound();
             }
@@ -98,12 +99,12 @@ namespace SpaNewYork.Controllers
             {
                 try
                 {
-                    _context.Update(gioHang);
+                    _context.Update(hoaDon);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GioHangExists(gioHang.ID))
+                    if (!HoaDonExists(hoaDon.SoHoaDon))
                     {
                         return NotFound();
                     }
@@ -114,10 +115,10 @@ namespace SpaNewYork.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(gioHang);
+            return View(hoaDon);
         }
 
-        // GET: GioHang/Delete/5
+        // GET: Admin/HoaDon/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -125,34 +126,34 @@ namespace SpaNewYork.Controllers
                 return NotFound();
             }
 
-            var gioHang = await _context.GioHang
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (gioHang == null)
+            var hoaDon = await _context.HoaDon
+                .FirstOrDefaultAsync(m => m.SoHoaDon == id);
+            if (hoaDon == null)
             {
                 return NotFound();
             }
 
-            return View(gioHang);
+            return View(hoaDon);
         }
 
-        // POST: GioHang/Delete/5
+        // POST: Admin/HoaDon/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var gioHang = await _context.GioHang.FindAsync(id);
-            if (gioHang != null)
+            var hoaDon = await _context.HoaDon.FindAsync(id);
+            if (hoaDon != null)
             {
-                _context.GioHang.Remove(gioHang);
+                _context.HoaDon.Remove(hoaDon);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GioHangExists(string id)
+        private bool HoaDonExists(string id)
         {
-            return _context.GioHang.Any(e => e.ID == id);
+            return _context.HoaDon.Any(e => e.SoHoaDon == id);
         }
     }
 }
